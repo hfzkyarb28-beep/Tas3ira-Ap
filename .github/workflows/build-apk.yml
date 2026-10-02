@@ -21,10 +21,10 @@ jobs:
 
     - name: Generate Gradle Wrapper and Build APK
       run: |
-        # إنشاء ملف التوقيع المطلوب تلقائياً
-        keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 || true
+        # إنشاء ملف التوقيع في المكان الصحيح داخل مجلد app
+        keytool -genkey -v -keystore app/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 || true
         
-        # توليد نظام التشغيل والجرادل بالإصدار المطلوب
+        # توليد الجرادل بالإصدار المطلوب للمشروع
         gradle wrapper --gradle-version 9.3.1
         
         # منح صلاحية التنفيذ
