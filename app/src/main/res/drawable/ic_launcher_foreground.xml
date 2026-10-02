@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Subtle Golden Arch Background -->
+    <path
+        android:fillColor="#1AF5C84C"
+        android:pathData="M34,76 L34,44 C34,33 43,26 54,26 C65,26 74,33 74,44 L74,76 Z" />
+    <path
+        android:strokeColor="#40F5C84C"
+        android:strokeWidth="1.5"
+        android:pathData="M34,76 L34,44 C34,33 43,26 54,26 C65,26 74,33 74,44 L74,76 Z" />
+
+    <!-- Open Book Base in Gold & Warm Cream -->
+    <!-- Left page -->
+    <path
+        android:fillColor="#F5C84C"
+        android:pathData="M52,43 C44,40 34,42 30,45 C29,45.8 28.5,46.8 28.5,48 L28.5,69 C28.5,70.2 29.5,71.2 30.7,71 C34.5,70.3 43.5,69 52,73 Z" />
+
+    <!-- Right page -->
+    <path
+        android:fillColor="#FFDF73"
+        android:pathData="M56,43 C64,40 74,42 78,45 C79,45.8 79.5,46.8 79.5,48 L79.5,69 C79.5,70.2 78.5,71.2 77.3,71 C73.5,70.3 64.5,69 56,73 Z" />
+
+    <!-- Book Spine / Center Binding -->
+    <path
+        android:fillColor="#D4A017"
+        android:pathData="M52,42 C53.3,42.5 54.7,42.5 56,42 L56,73 C54.7,73.5 53.3,73.5 52,73 Z" />
+
+    <!-- Text line impressions on left page -->
+    <path
+        android:strokeColor="#734B00"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M34,51 C39,50 44,51 47,52 M34,56 C39,55 44,56 47,57 M34,61 C39,60 44,61 47,62" />
+
+    <!-- Text line impressions on right page -->
+    <path
+        android:strokeColor="#734B00"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M61,52 C64,51 69,50 74,51 M61,57 C64,56 69,55 74,56 M61,62 C64,61 69,60 74,61" />
+
+    <!-- Hanging Bookmark Ribbon in Rich Gold/Crimson accent -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M52.5,41 L55.5,41 L55.5,64 L54,62.5 L52.5,64 Z" />
+
+    <!-- Top Star / Emblem Crown -->
+    <path
+        android:fillColor="#F5C84C"
+        android:pathData="M54,30 L55.5,33.5 L59.2,34 L56.5,36.5 L57.2,40.2 L54,38.3 L50.8,40.2 L51.5,36.5 L48.8,34 L52.5,33.5 Z" />
+</vector>

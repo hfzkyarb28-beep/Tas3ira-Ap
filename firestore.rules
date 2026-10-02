@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (request.auth.token.admin == true ||
+         exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isApprovedCustomer() {
+      return isAuthenticated() &&
+        (isAdmin() ||
+         get(/databases/$(database)/documents/customers/$(request.auth.uid)).data.status == 'APPROVED');
+    }
+
+    // 1. Products: Only approved customers & admin can read. Only admin can write.
+    match /products/{productId} {
+      allow read: if isApprovedCustomer();
+      allow write: if isAdmin();
+    }
+
+    // 2. Categories & Subcategories: Approved customers & admin can read. Only admin can write.
+    match /categories/{categoryId} {
+      allow read: if isApprovedCustomer();
+      allow write: if isAdmin();
+    }
+
+    // 3. Price History: Only admin can read and write price change logs.
+    match /priceHistory/{historyId} {
+      allow read, write: if isAdmin();
+    }
+
+    // 4. Customers & Join Requests:
+    // Customers can create and read their own record. Only admin can approve or update status.
+    match /customers/{customerId} {
+      allow read: if isAuthenticated() && (request.auth.uid == customerId || isAdmin());
+      allow create: if isAuthenticated() && request.auth.uid == customerId;
+      allow update, delete: if isAdmin();
+    }
+
+    // 5. App Settings:
+    match /settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}

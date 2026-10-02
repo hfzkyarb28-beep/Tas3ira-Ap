@@ -1,0 +1,6 @@
+{
+  "name": "تسعيرة مكتبة أهل البيت ع",
+  "description": "تطبيق إدارة وتصفح تسعيرة مكتبة أهل البيت ع دون إنترنت مع مزامنة سحابية وبحث عربي ذكي",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

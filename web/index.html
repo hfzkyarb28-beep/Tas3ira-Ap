@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسعيرة مكتبة أهل البيت ع</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0F5132">
+  <style>
+    :root {
+      --primary: #0F5132;
+      --primary-light: #D1E7DD;
+      --secondary: #B58900;
+      --secondary-light: #FFF2CD;
+      --bg: #F9F9F6;
+      --card-bg: #FFFFFF;
+      --text: #1E211E;
+      --text-muted: #6C757D;
+      --status-available: #198754;
+      --status-unavailable: #DC3545;
+      --status-paused: #D39E00;
+      --border: #E2E3DF;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Arabic', sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+    header .subtitle {
+      font-size: 0.75rem;
+      color: #FFDF73;
+    }
+    .header-actions button {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px;
+      width: 100%;
+      flex: 1;
+    }
+    .sync-bar {
+      background: var(--primary-light);
+      border-radius: 10px;
+      padding: 8px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .search-box {
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--card-bg);
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .search-box input:focus {
+      border-color: var(--primary);
+    }
+    .categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .category-card {
+      min-width: 140px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .category-card.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    .category-card h3 {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+    .category-card small {
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      background: #ecefe6;
+    }
+    .product-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .product-code {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: bold;
+    }
+    .product-name {
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin: 4px 0 6px;
+      line-height: 1.4;
+      flex: 1;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .badge.available { background: #d1e7dd; color: var(--status-available); }
+    .badge.unavailable { background: #f8d7da; color: var(--status-unavailable); }
+    .badge.paused { background: #fff3cd; color: var(--status-paused); }
+    .price-box {
+      background: #f4f6f0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-top: 6px;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 2px;
+    }
+    .price-row.wholesale {
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .price-row.retail {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>تسعيرة مكتبة أهل البيت ع</h1>
+      <div class="subtitle">المكتبة التراثية والقرطاسية • العمل دون إنترنت</div>
+    </div>
+    <div class="header-actions">
+      <button onclick="checkSync()">🔄 تحديث</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="sync-bar">
+      <div>
+        <strong>🟢 وضع التشغيل:</strong> بيانات محلية محفوظة في هاتفك (تصفح أوفلاين)
+      </div>
+      <div id="syncTime">آخر تحديث: اليوم</div>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="ابحث أثناء الكتابة (مثال: نهج البلاغة، قصد السبيل، أقلام)..." oninput="handleSearch()">
+    </div>
+
+    <div class="categories" id="categoriesContainer">
+      <!-- Generated via JS -->
+    </div>
+
+    <div id="resultsCount" style="margin-bottom: 10px; font-size: 0.85rem; color: var(--text-muted);">
+      جاري تحميل الأصناف...
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <!-- Generated via JS -->
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(console.error);
+    }
+
+    const categories = [
+      { id: 'ALL', name: 'الكل', sub: 'جميع الأصناف' },
+      { id: 'CAT1', name: 'كتب مكتبة أهل البيت ع', sub: 'إصدارات المكتبة' },
+      { id: 'CAT2', name: 'كتب غير مكتبة أهل البيت', sub: 'تراث وعام' },
+      { id: 'CAT3', name: 'القرطاسية', sub: 'أدوات ولوازم' }
+    ];
+
+    const products = [
+      {
+        code: "AB-001",
+        name: "نهج البلاغة - شرح وتحقيق كامل",
+        category: "كتب مكتبة أهل البيت ع",
+        wholesalePrice: 4500,
+        retailPrice: 5500,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80"
+      },
+      {
+        code: "AB-002",
+        name: "الصحيفة السجادية الكاملة مع الأدعية",
+        category: "كتب مكتبة أهل البيت ع",
+        wholesalePrice: 2800,
+        retailPrice: 3500,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80"
+      },
+      {
+        code: "AB-003",
+        name: "مفاتيح الجنان - طبعة مصححة معتمدة",
+        category: "كتب مكتبة أهل البيت ع",
+        wholesalePrice: 5200,
+        retailPrice: 6500,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1532012164546-f432f2e37b73?w=400&q=80"
+      },
+      {
+        code: "AB-004",
+        name: "قصد السبيل في معرفة أصول الفقه",
+        category: "كتب مكتبة أهل البيت ع",
+        wholesalePrice: 3800,
+        retailPrice: 4800,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=400&q=80"
+      },
+      {
+        code: "AB-005",
+        name: "قصد السائل في مسائل الحلال والحرام",
+        category: "كتب مكتبة أهل البيت ع",
+        wholesalePrice: 3200,
+        retailPrice: 4000,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&q=80"
+      },
+      {
+        code: "GEN-101",
+        name: "سيرة ابن هشام - تهذيب وتحقيق معاصر",
+        category: "كتب غير مكتبة أهل البيت",
+        wholesalePrice: 6000,
+        retailPrice: 7500,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=400&q=80"
+      },
+      {
+        code: "GEN-102",
+        name: "معجم لسان العرب - المختار والمفهرس",
+        category: "كتب غير مكتبة أهل البيت",
+        wholesalePrice: 8500,
+        retailPrice: 10500,
+        availability: "paused",
+        image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=400&q=80"
+      },
+      {
+        code: "ST-201",
+        name: "دفتر سلك جامعي فاخر 200 ورقة",
+        category: "القرطاسية",
+        wholesalePrice: 1200,
+        retailPrice: 1600,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&q=80"
+      },
+      {
+        code: "ST-202",
+        name: "طقم أقلام جاف أزرق ياباني (12 قلم)",
+        category: "القرطاسية",
+        wholesalePrice: 1800,
+        retailPrice: 2400,
+        availability: "available",
+        image: "https://images.unsplash.com/photo-1585336261026-778dfcb7b1c3?w=400&q=80"
+      },
+      {
+        code: "ST-203",
+        name: "حافظة مصحف وكتب جلدية منقوشة",
+        category: "القرطاسية",
+        wholesalePrice: 3000,
+        retailPrice: 4200,
+        availability: "unavailable",
+        image: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=400&q=80"
+      }
+    ];
+
+    let currentCategory = 'ALL';
+
+    function normalizeArabic(text) {
+      if (!text) return '';
+      return text.toLowerCase()
+        .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
+        .replace(/[أإآٱ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .replace(/ؤ/g, 'و')
+        .replace(/ئ/g, 'ي')
+        .trim();
+    }
+
+    function renderCategories() {
+      const container = document.getElementById('categoriesContainer');
+      container.innerHTML = categories.map(cat => `
+        <div class="category-card ${currentCategory === cat.id ? 'active' : ''}" onclick="selectCategory('${cat.id}')">
+          <h3>${cat.name}</h3>
+          <small>${cat.sub}</small>
+        </div>
+      `).join('');
+    }
+
+    function selectCategory(catId) {
+      currentCategory = catId;
+      renderCategories();
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const query = normalizeArabic(document.getElementById('searchInput').value);
+      const grid = document.getElementById('productsGrid');
+
+      let filtered = products;
+      if (currentCategory !== 'ALL') {
+        const catObj = categories.find(c => c.id === currentCategory);
+        filtered = filtered.filter(p => p.category === catObj.name);
+      }
+
+      if (query) {
+        filtered = filtered.filter(p =>
+          normalizeArabic(p.name).includes(query) ||
+          normalizeArabic(p.code).includes(query) ||
+          normalizeArabic(p.category).includes(query)
+        );
+      }
+
+      document.getElementById('resultsCount').innerText = `الأصناف المعروضة: ${filtered.length}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">لا توجد نتائج مطابقة للبحث</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <img src="${p.image}" alt="${p.name}">
+          <div class="product-body">
+            <span class="product-code">${p.code}</span>
+            <div class="product-name">${p.name}</div>
+            <div>
+              <span class="badge ${p.availability}">
+                ${p.availability === 'available' ? 'متوفر' : p.availability === 'unavailable' ? 'غير متوفر' : 'متوقف مؤقتا'}
+              </span>
+            </div>
+            <div class="price-box">
+              <div class="price-row wholesale">
+                <span>سعر الجملة:</span>
+                <span>${p.wholesalePrice.toLocaleString('ar-YE')} ر.ي</span>
+              </div>
+              <div class="price-row retail">
+                <span>سعر التجزئة:</span>
+                <span>${p.retailPrice.toLocaleString('ar-YE')} ر.ي</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleSearch() {
+      renderProducts();
+    }
+
+    function checkSync() {
+      const now = new Date();
+      document.getElementById('syncTime').innerText = `آخر تحديث: ${now.toLocaleTimeString('ar-YE')}`;
+      alert('تم تحديث ومزامنة التسعيرة محلياً بنجاح!');
+    }
+
+    renderCategories();
+    renderProducts();
+  </script>
+</body>
+</html>
